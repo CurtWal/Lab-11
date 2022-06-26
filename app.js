@@ -1,205 +1,176 @@
-'use strict'
+'use strict';
 
-
-
-// this array is going to hold all of our product objects
+// put my images in a array
 let allProducts = [];
 
-// make a array for all the clicks for every object 
-let allClicks = [];
 
-//make a array for the amount of times the object has been seen
+let clicksOnImage = document.getElementById('outsidepic');
+
+
+let results = document.getElementById('resultsbutton');
+
+// track the number of clicks
+let numberOfClicks = [];
+
+//Name of the images
+let itemLabels = [];
+
+// get a empty total clicks array
+let totalClicks = [];
+
+// get a empty array for the amount of times the image was seen
 let timesSeen = [];
 
-// making a max amount of clicks to all images
-let maxClicks = 10;
-//starting the total amount of clicks from 0
-let totalClicks = 0;
-
-// this array is going to hold all of our product names
-let productNames = ['bag', 'banana', 'bathroom', 'boots', 'breakfast', 'bubblegum', 'chair', 'cthulhu', 'dog-duck', 'dragon', 'pen', 'pet-sweep', 'scissors', 'shark', 'sweep', 'tauntaun', 'unicon', 'water-can', 'wine-glass'];
-
 // Create a constructor function that creates an object associated with each product, and has the following properties:
-function Product(name, path) {
-    // Name of the product
-    // File path of image
-    // Times the image has been shown
-    this.timesShown = 0;
-    this.timesClicked = 0;
-    this.name = name;
-    this.path = path;
-}
-// Create an algorithm that will randomly generate three unique product images from the images directory and display them side-by-side-by-side in the browser window.
-
-//an algorithm is a step by step list of instructions to be executred
-function getRandomImage() {
-    // gives me a whole number
-    return Math.floor(Math.random() * productNames.length)
-}
-
-// get both images
-let img_one = document.querySelector('#image-container img:first-child')
-let img_two = document.querySelector('#image-container img:nth-child(2)')
-let img_three = document.querySelector('#image-container img:nth-child(3)')
-const imageContainer = document.getElementById('image-container');
-const resultContainer = document.getElementById('results');
-let resultsButton = document.getElementById('results-button');
-
-
-//add event listeners
-resultsButton.addEventListener('click', showResults)
+let Products = function(name, filepath) {
+  this.name = name;
+  this.filepath = filepath;
+  this.timesClicked = 0;
+  this.displayed = 0;
+  allProducts.push(this);
+};
 
 // instance variable -> objects
+new Products('bag','assets/bag.jpg');
+new Products('banana','assets/banana.jpg');
+new Products('bathroom','assets/bathroom.jpg');
+new Products('boots','assets/boots.jpg');
+new Products('breakfast','assets/breakfast.jpg');
+new Products('bubblegum','assets/bubblegum.jpg');
+new Products('chair','assets/chair.jpg');
+new Products('cthulhu','assets/cthulhu.jpg');
+new Products('dog-duck','assets/dog-duck.jpg');
+new Products('dragon','assets/dragon.jpg');
+new Products('pen','assets/pen.jpg');
+new Products('pet-sweep','assets/pet-sweep.jpg');
+new Products('scissors','assets/scissors.jpg');
+new Products('shark','assets/shark.jpg');
+new Products('sweep','assets/sweep.png');
+new Products ('tauntaun','assets/tauntaun.jpg');
+new Products('unicorn','assets/unicorn.jpg');
+new Products('water-can','assets/water-can.jpg');
+new Products('wine-glass','assets/wine-glass.jpg');
 
-let bag = new Product('bag', './assets/bag.jpg') //'assest'/+ bag.name + '.jpg'
-let banana = new Product('banana', './assets/banana.jpg')
-let bathroom = new Product('bathroom', './assets/bathroom.jpg')
+// Create an algorithm that will randomly generate three unique product images from the images directory and display them side-by-side-by-side in the browser window.
+function randomPic() {
+  return Math.floor(Math.random() * allProducts.length);
+  
+}
+//  displays the random image
+function displayImages() {
+  let imageLeft = randomPic();
+  let imageCenter = randomPic();
+  let imageRight = randomPic();
+//   if the middle and left image are the same change the middle image until they are different
+  while (imageCenter === imageLeft) {
+    imageCenter = randomPic();
 
-function constructImages() {
+  }
 
+// if the right image is the same as the left and middle image change until its is different then them
+  while (imageRight === imageCenter || imageRight === imageLeft) {
+    imageRight = randomPic();
+    
+  }
+// get the first img tag from the html doc and place the left image there
+  let firstImage = document.getElementById('image1');
+  firstImage.src = allProducts[imageLeft].filepath;
+  firstImage.alt = allProducts[imageLeft].name;
 
-    //let bag0 = new Product(productNames[0],'./assests' + productNames[0] + '.png')// how to get it out of the array
+//   get the second img tag form the html doc and place the middle image there
+  let secondImage = document.getElementById('image2');
+  secondImage.src = allProducts[imageCenter].filepath;
+  secondImage.alt = allProducts[imageCenter].name;
+  
 
-
-    // i want to make an image for every name in the productname array
-
-
-    //make this smaller/stop repeating
-    // add the src attribute to the image
-    img_one.setAttribute('src', bag.path);
-    img_one.setAttribute('alt', bag.name);
-    img_two.setAttribute('src', banana.path);
-    img_two.setAttribute('alt', banana.name);
-    img_three.setAttribute('src', bathroom.path);
-    img_three.setAttribute('alt', bathroom.name);
-
-
-    img_one.addEventListener('click', function () {
-        trackClicks(bag)
-    });
-    img_two.addEventListener('click', function () {
-        trackClicks(banana)
-    });
-    img_three.addEventListener('click', function () {
-        trackClicks(bathroom)
-    });
-    timesShown(bag)
-    timesShown(banana)
-    timesShown(bathroom)
+//   get the third img tag form the html doc and place the right image there
+  let thirdImage = document.getElementById('image3');
+  thirdImage.src = allProducts[imageRight].filepath;
+  thirdImage.alt = allProducts[imageRight].name;
+  
+  
 }
 
-// make a function to randomly display image
-function displayRandomImage() {
-    //this function needs to call the randomizer algorith
+displayImages();
+
+// make a function that tells the user to click a image if they click outside them
+// set 25 clicks as the max clicks and alert the user that they reach the max clicks
+function clicks(event) {
+  let imageId = event.target.id;
+  let imageAlt = event.target.alt;
+
+//   tells the user to click a image
+  if (imageId === 'outsidepic') {
+    alert('Please click on an image to vote!');
+  } 
+//   set the max amount of clicks the user can do
+  else if (numberOfClicks < 10) {
+    for (let i = 0; i < allProducts.length; i++) {
+      if(imageAlt === allProducts[i].name) {
+        // adds 1 to the image that is clicked
+        allProducts[i].timesClicked ++;
+        allProducts[i].displayed++;
+        // tracks the amount of clicks the user do 
+        numberOfClicks++;
+      }
+        displayImages();
+        
+        // alerts user when they reach the max clicks
+      if(numberOfClicks === 10){
+        alert('To many click; Please click results to see!!!')
+        return
+      }
+    }
+  }
+  localStorage.clear();
+  let imgArrayData = JSON.stringify(allProducts);
+  localStorage.setItem('itemLabels' , imgArrayData);
+  let clickTotal = JSON.stringify(numberOfClicks);
+  localStorage.setItem('clicks' , clickTotal);
 }
 
-// make a function to keep track of the times a certain obj was clicked
-function trackClicks(product) {
-    // need to pass an object to this function
 
-
-
-    // IF the object is clicked ->
-    //check the timeClicked property against the maxClicks
-    if (totalClicks < maxClicks) {
-        // THEN incerease the value of timesClicked by one per clicked
-        product.timesClicked++
-        totalClicks++
-        // allClicks.push(product.timesClicked)
-        // console.log(product)  
-
-    } else {
-        alert("too many clicks");
-        //push the amount of clicks for the objects
-        allClicks.push(bag.timesClicked, banana.timesClicked, bathroom.timesClicked)
-        console.log(allClicks);
-
-
-    }
-
-    // console.log(product.timesClicked)
-    //    console.log(allClicks)
+// make a bar chart that displays all the amount of times a image has been clicked and viewed
+function updateChart() {
+  for (let i = 0; i < allProducts.length; i++) {
+    itemLabels.push(allProducts[i].name);
+    totalClicks.push(allProducts[i].timesClicked);
+    timesSeen.push(allProducts[i].displayed)
+  }
 }
 
-// make a function that keeps track oof how many times an image in clicked
-function timesShown(product) {
-    // we need to pass an obj to this function
-    // check if the image is here
-    if (product.name === img_one.alt) {
-        // IF the image is shown on the document ->
-        // THEN increase the value of timesShown by one
-        console.log(product.name + ' is on the page')
-        product.timesShown++
-        console.log(product.timesShown)
-    }
-    else if (product.name === img_two.alt) {
-        // IF the image is shown on the document ->
-        // THEN increase the value of timesShown by one
-        console.log(product.name + ' is on the page')
-        product.timesShown++
-        console.log(product.timesShown)
-    }
-    else if (product.name === img_three.alt) {
-        // IF the image is shown on the document ->
-        // THEN increase the value of timesShown by one
-        console.log(product.name + ' is on the page')
-        product.timesShown++
-        console.log(product.timesShown)
-    }
-    else {
-        console.log('there is no image here')
-    }
-    //push the amount of times the object was shown 
-    timesSeen.push(product.timesShown)
-    console.log(timesSeen)
-}
-// make a function that display the result on the result div
-function displayResults(productsArray) {
+function makeChart() {
+  updateChart();
+  let canvas = document.getElementById('chart');
 
-    for (let i = 0; i < productsArray.length; i++) {
-        let product = productsArray[i]
-        //   console.log(product)
-        let resultMessage = `this product was click ${product.timesClicked} times
-                this product was shown  ${product.timesShown} times
-                this product is called ${product.name}
-                you can find this product at : ${product.path} !!!`
-        // console.log(resultMessage)
-        // resultContainer.textContent = resultMessage
-        let p = document.createElement('p');
-        p.textContent = resultMessage;
-        resultContainer.appendChild(p)
-    }
-    // console.log(productsArray)
-}
+  const ctx = canvas.getContext('2d');
 
-function showResults() {
-    //check to see if the max clicks are met
-    if (totalClicks === maxClicks) {
-        displayResults(allProducts)
-    }
-    resultsButton.addEventListener('click', function () {
-
-        alert('Here are your Results!');
-        //pull in my canvas element from html
-        let canvas = document.getElementById('canvas')
-
-        //next we need to make a chart
-        const ctx = canvas.getContext('2d');//making a object to draw 2d
-
-        //create a bar chart that shows the amount of clicks and time shown
-        const myChart = new Chart(ctx, {
-            type: 'bar',
+  let chart = new Chart(ctx, {
+    type: 'bar',
             data: {
-                labels: productNames,//pass array to our label data
+                labels: itemLabels,//pass array to our label data
                 datasets: [{
                     label: '# of Clicks',
-                    data: allClicks,//has to match the label data
+                    data: totalClicks,//has to match the label data
                     backgroundColor: [
                         'rgba(255, 99, 132, 0.2)',
                         'rgba(54, 162, 235, 0.2)',
                         'rgba(255, 206, 86, 0.2)',
                         'rgba(75, 192, 192, 0.2)',
                         'rgba(153, 102, 255, 0.2)',
+                        'rgba(255, 159, 64, 0.2)',
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(153, 102, 255, 0.2)',
+                        'rgba(255, 159, 64, 0.2)',
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(153, 102, 255, 0.2)',
+                        'rgba(255, 159, 64, 0.2)',
                         'rgba(255, 159, 64, 0.2)'
                     ],
                     borderColor: [
@@ -208,6 +179,19 @@ function showResults() {
                         'rgba(255, 206, 86, 1)',
                         'rgba(75, 192, 192, 1)',
                         'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 64, 1)',
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 64, 1)',
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 64, 1)',
                         'rgba(255, 159, 64, 1)'
                     ],
                     borderWidth: 1
@@ -221,6 +205,19 @@ function showResults() {
                         'rgba(255, 206, 86, 0.2)',
                         'rgba(75, 192, 192, 0.2)',
                         'rgba(153, 102, 255, 0.2)',
+                        'rgba(255, 159, 64, 0.2)',
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(153, 102, 255, 0.2)',
+                        'rgba(255, 159, 64, 0.2)',
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(153, 102, 255, 0.2)',
+                        'rgba(255, 159, 64, 0.2)',
                         'rgba(255, 159, 64, 0.2)'
                     ],
                     borderColor: [
@@ -229,6 +226,19 @@ function showResults() {
                         'rgba(255, 206, 86, 1)',
                         'rgba(75, 192, 192, 1)',
                         'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 64, 1)',
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 64, 1)',
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 64, 1)',
                         'rgba(255, 159, 64, 1)'
                     ],
                     borderWidth: 1
@@ -243,17 +253,7 @@ function showResults() {
             }
         });
 
-    })
+    }
 
-
-}
-
-
-
-
-// ___EXECUTEABLE CODE___
-constructImages()
-showResults()
-
-
-
+clicksOnImage.addEventListener('click', clicks);
+results.addEventListener('click', makeChart);

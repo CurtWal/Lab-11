@@ -1,26 +1,42 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="styles.css">
+  
+  <title>Odd Ducks</title>
+  <link href="styles.css" rel = "stylesheet">
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.3.0/Chart.min.js"></script>
 </head>
 <body>
-    <div id="image-container">
-        <img src="" alt=""/>
-        <img src="" alt=""/>
-        <img src="" alt=""/>
-    </div>
-    <button id="results-button">Results</button>
-    <div id="results">
+  <header>
+    <h1>Odd Ducks Selection</h1>
+    <h2>Please select the item you would be most likely to buy.</h2>
+    <p>You can pick up to <u>25 items</u>, choosing the same item is ok.</p>
+    <p>After choosing your 25 items please see results.</p>
+  </header>
+  <main>
 
+    <div id="outsidepic">
+        <figure>
+      <img id = "image1" src="" alt="" title="">
+    <figcaption id="left-name"></figcaption>
+    </figure>
+    <figure>
+      <img id = "image2" src="" alt="" title="" >
+      <figcaption id="middle-name"></figcaption>
+    </figure>
+    <figure>
+      <img id = "image3" src="" alt="" title="">
+        <figcaption id="right-name"></figcaption>
+    </figure>
     </div>
-    <canvas id="canvas" width="400" height="100">
-        Your browser does not support the canvas element.
-    </canvas>
+
+    <button type="button" value="results" id="resultsbutton">Results</button>
+
+    <div id="chartstyle">
+    <canvas id="chart"></canvas>
+    </div>
+  </main>
 </body>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.8.0/chart.min.js" integrity="sha512-sW/w8s4RWTdFFSduOTGtk4isV1+190E/GghVffMA9XczdJ2MDzSzLEubKAs5h0wzgSJOQTRYyaz73L3d6RtJSg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<script src="./app.js"></script>
+
+<script src="app.js"></script>
 </html>
